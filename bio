@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link Bio · Huy Minh Store</title>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            background: #0b0a0e;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-color: #0d0b12;
+            background-image:
+                linear-gradient(rgba(80, 70, 130, 0.25) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(80, 70, 130, 0.25) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridSlide 18s linear infinite;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(120, 80, 255, 0.10) 0%, transparent 55%),
+                radial-gradient(circle at 80% 70%, rgba(255, 80, 180, 0.07) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.4) 0%, transparent 80%);
+            pointer-events: none;
+        }
+
+        @keyframes gridSlide {
+            0% {
+                background-position: 0px 0px;
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                background-position: 40px 40px;
+                transform: rotate(0.2deg) scale(1.01);
+            }
+            100% {
+                background-position: 0px 0px;
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .card {
+            position: relative;
+            z-index: 2;
+            max-width: 420px;
+            width: 100%;
+            padding: 2.5rem 2rem 2rem;
+            background: rgba(12, 10, 20, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 2.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow:
+                0 30px 70px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+                0 0 60px rgba(100, 70, 255, 0.04);
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(168, 85, 247, 0.25);
+            box-shadow:
+                0 45px 90px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(168, 85, 247, 0.08) inset,
+                0 0 80px rgba(168, 85, 247, 0.10);
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.2rem;
+            padding: 3px;
+            background: conic-gradient(from 0deg, #a855f7, #6366f1, #ec4899, #a855f7);
+            background-size: 200% 200%;
+            animation: spinGradient 8s linear infinite;
+            box-shadow: 0 8px 30px rgba(120, 80, 255, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.04);
+        }
+
+        @keyframes spinGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background: #14121e;
+            border: 3px solid rgba(10, 8, 18, 0.8);
+        }
+
+        .name-wrapper {
+            margin-bottom: 0.15rem;
+        }
+
+        .name {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #a78bfa, #ec4899, #f59e0b);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientText 6s ease-in-out infinite alternate;
+            display: inline-block;
+            padding: 0.1rem 0;
+        }
+
+        @keyframes gradientText {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .bio-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin: 0.2rem 0 0.8rem 0;
+        }
+
+        .bio-line {
+            flex: 1;
+            height: 1px;
+            max-width: 40px;
+            background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.2), transparent);
+        }
+
+        .bio {
+            font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 400;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .bio i {
+            color: #a78bfa;
+            font-size: 0.95rem;
+            animation: pulseIcon 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        .bio-wrapper+.bio-wrapper {
+            margin-top: -0.2rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0.8rem 1.2rem 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            letter-spacing: 0.2px;
+            width: 100%;
+            position: relative;
+        }
+
+        .link-btn i {
+            font-size: 1.15rem;
+            width: 1.8rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            transition: color 0.25s, transform 0.25s;
+            flex-shrink: 0;
+        }
+
+        .link-btn span {
+            flex: 1;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-right: 1.8rem;
+        }
+
+        .link-btn:hover {
+            transform: scale(1.02) translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .link-btn:hover i {
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .link-btn.facebook:hover {
+            background: rgba(24, 119, 242, 0.15);
+            border-color: #1877f2;
+        }
+        .link-btn.facebook:hover i {
+            color: #1877f2;
+        }
+
+        .link-btn.zalo:hover {
+            background: rgba(0, 150, 255, 0.15);
+            border-color: #0096ff;
+        }
+        .link-btn.zalo:hover i {
+            color: #0096ff;
+        }
+
+        .link-btn.discord:hover {
+            background: rgba(88, 101, 242, 0.15);
+            border-color: #5865f2;
+        }
+        .link-btn.discord:hover i {
+            color: #5865f2;
+        }
+
+        .link-btn.telegram:hover {
+            background: rgba(0, 136, 204, 0.15);
+            border-color: #0088cc;
+        }
+        .link-btn.telegram:hover i {
+            color: #0088cc;
+        }
+
+        .link-btn.website {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(99, 102, 241, 0.18));
+            border-color: rgba(168, 85, 247, 0.25);
+            padding: 0.85rem 1.2rem 0.85rem 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.04);
+            margin-top: 0.1rem;
+        }
+
+        .link-btn.website i {
+            color: #a78bfa;
+            font-size: 1.2rem;
+        }
+
+        .link-btn.website span {
+            font-size: 0.95rem;
+        }
+
+        .link-btn.website:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.28), rgba(99, 102, 241, 0.28));
+            border-color: #a855f7;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.15), 0 0 80px rgba(168, 85, 247, 0.05);
+            transform: scale(1.02) translateY(-2px);
+        }
+
+        .link-btn.website:hover i {
+            color: #c4b5fd;
+        }
+
+        .link-btn.website .arrow {
+            font-size: 0.9rem;
+            opacity: 0.5;
+            transition: opacity 0.25s, transform 0.25s;
+            flex-shrink: 0;
+            margin-left: 0.2rem;
+        }
+
+        .link-btn.website:hover .arrow {
+            opacity: 0.9;
+            transform: translateX(4px);
+        }
+
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 1.8rem;
+            margin: 0.4rem 0 0.2rem 0;
+        }
+
+        .social-row a {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 1.5rem;
+            transition: all 0.25s ease;
+        }
+
+        .social-row a:hover {
+            color: #c4b5fd;
+            transform: translateY(-3px) scale(1.1);
+            text-shadow: 0 0 20px rgba(120, 80, 255, 0.2);
+        }
+
+        .music-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10;
+        }
+
+        .music-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(12, 10, 20, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.08);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: #c4b5fd;
+            background: rgba(168, 85, 247, 0.12);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);
+        }
+
+        .music-btn.playing i {
+            animation: spinMusic 3s linear infinite;
+        }
+
+        @keyframes spinMusic {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .footer {
+            margin-top: 0.8rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.12);
+            letter-spacing: 0.4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            padding-top: 1rem;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 2rem 1.2rem 1.5rem;
+                border-radius: 2.2rem;
+            }
+            .avatar {
+                width: 85px;
+                height: 85px;
+            }
+            .name {
+                font-size: 1.7rem;
+            }
+            .bio {
+                font-size: 0.8rem;
+                white-space: normal;
+                gap: 0.3rem;
+            }
+            .bio-line {
+                max-width: 25px;
+            }
+            .bio-wrapper {
+                gap: 0.4rem;
+            }
+            .link-btn {
+                padding: 0.7rem 0.8rem 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            .link-btn i {
+                font-size: 1rem;
+                width: 1.4rem;
+            }
+            .link-btn span {
+                font-size: 0.85rem;
+                margin-right: 1.2rem;
+            }
+            .link-btn.website {
+                padding: 0.75rem 0.8rem 0.75rem 1.2rem;
+            }
+            .link-btn.website i {
+                font-size: 1rem;
+            }
+            .link-btn.website span {
+                font-size: 0.85rem;
+            }
+            .social-row {
+                gap: 1.4rem;
+            }
+            .social-row a {
+                font-size: 1.3rem;
+            }
+            .music-float {
+                bottom: 16px;
+                right: 16px;
+            }
+            .music-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+            .grid-bg {
+                background-size: 40px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NỀN -->
+    <div class="grid-bg"></div>
+    <div class="grid-overlay"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Ô NHẠC NỔI GÓC PHẢI -->
+    <div class="music-float">
+        <button class="music-btn" id="musicBtn" aria-label="Bật/tắt nhạc nền">
+            <i class="fas fa-music"></i>
+        </button>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+        <!-- Avatar -->
+        <div class="avatar">
+            <img src="https://sf-static.upanhlaylink.com/img/image_20260817e9d3bc39856b1d57a778049919c6f6fc.jpg" alt="Avatar" />
+        </div>
+
+        <!-- Tên -->
+        <div class="name-wrapper">
+            <h1 class="name">Huy Minh</h1>
+        </div>
+
+        <!-- Bio dòng 1 -->
+        <div class="bio-wrapper">
+            <span class="bio-line"></span>
+            <p class="bio">
+                <i class="fas fa-code"></i> Developer : Huy Minh Store
+            </p>
+            <span class="bio-line"></span>
+        </div>
+
+        <!-- Bio dòng 2 -->
+        <div class="bio-wrapper">
+            <span class="bio-line"></span>
+            <p class="bio">
+                <i class="fas fa-crosshairs"></i> Hỗ Trợ Kéo Tâm Free Fire Mọi Thiết Bị
+            </p>
+            <span class="bio-line"></span>
+        </div>
+
+        <!-- Danh sách link -->
+        <div class="links">
+            <a href="#" class="link-btn facebook">
+                <i class="fab fa-facebook-f"></i>
+                <span>Facebook</span>
+            </a>
+            <a href="https://zalo.me/0378881167" class="link-btn zalo">
+                <i class="fas fa-phone-alt"></i>
+                <span>Zalo Chính Chủ</span>
+            </a>
+            <a href="https://zalo.me/g/7uacp6cbpvjyt7ah7vlp" class="link-btn zalo">
+                <i class="fas fa-users"></i>
+                <span>Box Zalo Thông Báo</span>
+            </a>
+            <a href="https://discord.gg/AHPYTSQws" class="link-btn discord">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+            </a>
+            <a href="https://t.me/huyminh1104" class="link-btn telegram">
+                <i class="fab fa-telegram-plane"></i>
+                <span>Telegram</span>
+            </a>
+            <a href="https://huyminhstore.site" class="link-btn website">
+                <i class="fas fa-store"></i>
+                <span>Website Bank Tự Động</span>
+                <i class="fas fa-arrow-right arrow"></i>
+            </a>
+        </div>
+
+        <!-- Social row -->
+        <div class="social-row">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.tiktok.com/@hminh.game?_r=1&_t=ZS-98xb5L737Qd" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://zalo.me/0378881167" aria-label="Zalo"><i class="fas fa-phone-alt"></i></a>
+            <a href="https://discord.gg/AHPYTSQws" aria-label="Discord"><i class="fab fa-discord"></i></a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <a href="#">© 2026 · Copyright By HuyMinh Store</a>
+        </div>
+
+    </div>
+
+    <!-- Thẻ Audio với link MP3 mới -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://straightforward-gray-wo4hh1z3.edgeone.dev/" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ audio.
+    </audio>
+
+    <script>
+        // ----- ÂM NHẠC TỰ ĐỘNG PHÁT -----
+        const audio = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
+
+        // Hàm bật/tắt nhạc (dùng cho nút)
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                musicBtn.classList.remove('playing');
+                musicBtn.querySelector('i').className = 'fas fa-music';
+            } else {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.classList.add('playing');
+                    musicBtn.querySelector('i').className = 'fas fa-music';
+                }).catch(err => {
+                    console.warn('Không thể phát nhạc:', err);
+                });
+            }
+        }
+
+        musicBtn.addEventListener('click', togglePlay);
+
+        // Thử tự động phát khi trang tải
+        function tryAutoPlay() {
+            audio.play().then(() => {
+                isPlaying = true;
+                musicBtn.classList.add('playing');
+                musicBtn.querySelector('i').className = 'fas fa-music';
+            }).catch(() => {
+                // Nếu bị chặn, đợi người dùng click bất kỳ đâu để phát lần đầu
+                document.addEventListener('click', function firstClick() {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        musicBtn.classList.add('playing');
+                        musicBtn.querySelector('i').className = 'fas fa-music';
+                    }).catch(err => console.warn('Không thể phát nhạc sau click:', err));
+                    document.removeEventListener('click', firstClick);
+                }, { once: true });
+            });
+        }
+
+        // Gọi sau khi DOM tải
+        document.addEventListener('DOMContentLoaded', tryAutoPlay);
+
+        // Nếu audio bị lỗi (ví dụ link hỏng)
+        audio.addEventListener('error', () => {
+            console.warn('Lỗi tải file nhạc. Kiểm tra lại đường dẫn.');
+            if (isPlaying) {
+                isPlaying = false;
+                musicBtn.classList.remove('playing');
+                musicBtn.querySelector('i').className = 'fas fa-music';
+            }
+        });
+
+        // ----- PARTICLE -----
+        (function() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const PARTICLE_COUNT = 60;
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 4 + 2;
+                    this.speedX = (Math.random() - 0.5) * 0.45;
+                    this.speedY = (Math.random() - 0.5) * 0.45;
+                    const hue = 240 + Math.random() * 60;
+                    this.color = `hsla(${hue}, 75%, 70%, ${0.3 + Math.random() * 0.3})`;
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > width) {
+                        this.speedX *= -1;
+                        this.x = Math.max(0, Math.min(width, this.x));
+                    }
+                    if (this.y < 0 || this.y > height) {
+                        this.speedY *= -1;
+                        this.y = Math.max(0, Math.min(height, this.y));
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowColor = 'rgba(160, 120, 255, 0.12)';
+                    ctx.shadowBlur = 12;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                initParticles();
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                ctx.shadowBlur = 0;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 100) {
+                            const opacity = 0.06 * (1 - dist / 100);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(180, 150, 255, ${opacity})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            animate();
+
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                for (let i = 0; i < 5; i++) {
+                    const p = new Particle();
+                    p.x = x + (Math.random() - 0.5) * 30;
+                    p.y = y + (Math.random() - 0.5) * 30;
+                    p.size = Math.random() * 5 + 2;
+                    particles.push(p);
+                }
+                if (particles.length > 180) {
+                    particles.splice(0, particles.length - 180);
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>
